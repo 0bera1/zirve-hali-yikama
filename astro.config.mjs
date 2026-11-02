@@ -5,8 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  // TODO: gerçek alan adı alınınca güncelle
-  site: 'https://www.ORNEK-ALANADI.com.tr',
+  // Canlı adres
+  site: 'https://zirve-hali.beraekimci.com.tr',
   trailingSlash: 'always',
   build: { format: 'directory' },
   integrations: [sitemap()],

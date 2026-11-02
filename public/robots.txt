@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
 
-# TODO: gerçek alan adı alınınca güncelle
-Sitemap: https://www.ORNEK-ALANADI.com.tr/sitemap-index.xml
+# Canlı adres
+Sitemap: https://zirve-hali.beraekimci.com.tr/sitemap-index.xml
