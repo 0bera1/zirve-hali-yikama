@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Button from '../components/Button.astro';
+import { waLink, waMessages } from '../lib/whatsapp';
+---
+
+<BaseLayout
+  title="Sayfa bulunamadı | Zirve Halı & Koltuk Yıkama"
+  description="Aradığınız sayfa bulunamadı."
+  noindex
+>
+  <SiteHeader slot="header">
+    <div class="wrap flex flex-col gap-5 pt-14 pb-[72px]">
+      <h1 class="h-page m-0">Sayfa bulunamadı</h1>
+      <p class="m-0 max-w-[600px] text-lg leading-[1.6] text-on-dark">
+        Aradığınız sayfa taşınmış veya hiç var olmamış olabilir. Ana sayfaya dönebilir ya da bize WhatsApp'tan
+        yazabilirsiniz.
+      </p>
+      <div class="mt-1 flex flex-wrap gap-3">
+        <Button href="/" variant="yellow" size="md">Ana Sayfaya Dön</Button>
+        <Button href={waLink(waMessages.fab)} variant="ghost-light" size="md" icon="whatsapp">
+          WhatsApp'tan Yazın
+        </Button>
+      </div>
+    </div>
+  </SiteHeader>
+  <div class="h-20"></div>
+</BaseLayout>

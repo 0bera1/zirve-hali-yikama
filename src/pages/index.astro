@@ -1,0 +1,258 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeHero from '../components/HomeHero.astro';
+import CampaignStrip from '../components/CampaignStrip.astro';
+import SectionLabel from '../components/SectionLabel.astro';
+import Icon from '../components/Icon.astro';
+import Button from '../components/Button.astro';
+import BeforeAfterPair from '../components/BeforeAfterPair.astro';
+import { phoneHref, site } from '../data/site';
+import { services } from '../data/services';
+import { processSteps, priceItems } from '../data/content';
+import { beforeAfterPairs, recentWorks } from '../data/gallery';
+import { waLink, waMessages } from '../lib/whatsapp';
+---
+
+<BaseLayout
+  title="Tire Halı Yıkama | Zirve Halı & Koltuk Yıkama — Kapıdan Alım"
+  description="Tire'de halı, koltuk, stor perde ve yorgan yıkama. Halınızı kapınızdan alır, fabrikada yıkar, paketleyip evinize teslim ederiz. Hemen arayın."
+>
+  <HomeHero />
+  <CampaignStrip />
+
+  <!-- 01 — Hizmetler -->
+  <section id="hizmetler" class="wrap section-y flex flex-col gap-7 md:gap-14">
+    <div class="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end md:justify-between md:gap-x-16 md:gap-y-6">
+      <div class="flex flex-col gap-3 md:flex-[1_1_460px] md:gap-4">
+        <SectionLabel number="01" label="Hizmetler" />
+        <h2 class="h-section m-0">Evinizdeki tüm tekstil için tek adres</h2>
+      </div>
+      <p class="m-0 hidden max-w-[440px] text-[17px] leading-[1.65] text-muted md:block md:flex-[1_1_360px]">
+        Halıdan araç koltuğuna kadar her ürüne, kumaşına uygun yöntemle ve profesyonel ekipmanla yaklaşıyoruz.
+      </p>
+    </div>
+    <ul
+      class="m-0 flex list-none flex-col border-t border-line p-0 md:grid md:grid-cols-2 md:gap-px md:overflow-hidden md:rounded-[20px] md:border md:bg-line lg:grid-cols-3"
+    >
+      {
+        services.map((service) => (
+          <li class="flex gap-4 border-b border-line py-5 md:flex-col md:gap-3.5 md:border-b-0 md:bg-white md:px-8 md:py-9 md:transition-colors md:duration-150 md:hover:bg-sand">
+            <Icon name={service.icon} size={26} strokeWidth={1.6} class="mt-0.5 text-teal md:size-[30px]" />
+            <div class="flex flex-col gap-1 md:gap-3.5">
+              <h3 class="m-0 text-[17px] font-bold md:mt-2 md:text-xl md:tracking-[-0.015em]">{service.title}</h3>
+              <p class="m-0 text-sm leading-[1.55] text-muted md:text-[15px] md:leading-[1.65]">{service.summary}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- 02 — Önce / Sonra -->
+  <section id="once-sonra" class="dark-zone bg-ink text-white">
+    <div class="mx-auto flex max-w-[calc(1040px+2*var(--gutter))] flex-col gap-6 px-[var(--gutter)] py-16 md:items-center md:gap-9 md:py-28">
+      <div class="flex flex-col gap-3 md:items-center md:gap-4 md:text-center">
+        <SectionLabel number="02" label="Önce / Sonra" tone="dark" />
+        <h2 class="h-section m-0">Sonuçlar kendini anlatıyor</h2>
+        <p class="m-0 max-w-[520px] text-[15px] leading-[1.6] text-[#bfc3c9] md:text-[17px]">
+          Tüm fotoğraflar kendi işlerimizden.
+        </p>
+      </div>
+      <div class="grid w-full gap-6 md:grid-cols-2 md:gap-8">
+        <figure class="m-0 flex flex-col gap-3 md:gap-4">
+          <BeforeAfterPair pair={beforeAfterPairs.koltuk} />
+          <figcaption class="flex justify-between gap-3 text-sm md:text-[15px]">
+            <strong class="font-bold">Beyaz köşe koltuk</strong>
+            <span class="text-on-dark-muted">Leke temizliği</span>
+          </figcaption>
+        </figure>
+        <figure class="m-0 flex flex-col gap-3 md:gap-4">
+          <BeforeAfterPair pair={beforeAfterPairs.sandalye} />
+          <figcaption class="flex justify-between gap-3 text-sm md:text-[15px]">
+            <strong class="font-bold">Kumaş yemek sandalyesi</strong>
+            <span class="text-on-dark-muted">Yerinde temizlik</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 — Süreç -->
+  <section id="surec" class="wrap section-y flex flex-col gap-7 md:gap-14">
+    <div class="flex max-w-[640px] flex-col gap-3 md:gap-4">
+      <SectionLabel number="03" label="Süreç" />
+      <h2 class="h-section m-0">Siz arayın, gerisini biz halledelim</h2>
+    </div>
+    <!-- mobil: zaman çizelgesi -->
+    <ol class="m-0 flex list-none flex-col p-0 pl-1 md:hidden">
+      {
+        processSteps.map((step, i) => (
+          <li class="flex gap-[18px]">
+            <div class="flex flex-col items-center">
+              <span
+                class:list={[
+                  'flex size-[34px] items-center justify-center rounded-full border-2 border-teal text-[13px] font-extrabold',
+                  i === 0 ? 'bg-teal text-white' : 'bg-white text-teal',
+                ]}
+              >
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              {i < processSteps.length - 1 && <span class="w-0.5 flex-1 bg-line" />}
+            </div>
+            <div class:list={['flex flex-col gap-1 pt-[5px]', i < processSteps.length - 1 ? 'pb-7' : 'pb-0']}>
+              <strong class="text-[17px] font-bold">{step.title}</strong>
+              <span class="text-sm leading-[1.55] text-muted">{step.text}</span>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+    <!-- masaüstü: 4 sütun -->
+    <ol class="m-0 hidden list-none grid-cols-[repeat(auto-fit,minmax(230px,1fr))] gap-8 p-0 md:grid">
+      {
+        processSteps.map((step, i) => (
+          <li
+            class:list={[
+              'flex flex-col gap-2.5 border-t-2 pt-6',
+              i === 0 ? 'border-teal' : 'border-line-strong',
+            ]}
+          >
+            <span class="text-sm font-extrabold text-teal">{String(i + 1).padStart(2, '0')}</span>
+            <strong class="text-xl font-bold tracking-[-0.015em]">{step.title}</strong>
+            <span class="text-[15px] leading-[1.6] text-muted">{step.text}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- 04 — Son işlerimiz -->
+  <section class="bg-sand">
+    <div class="wrap flex flex-col gap-6 py-16 md:gap-12 md:py-28">
+      <div class="flex flex-wrap items-end justify-between gap-5">
+        <div class="flex flex-col gap-3 md:gap-4">
+          <SectionLabel number="04" label="Son İşlerimiz" />
+          <h2 class="h-section m-0">Tire'deki evlerden</h2>
+        </div>
+        <a
+          href={site.instagram}
+          target="_blank"
+          rel="noopener"
+          class="hidden min-h-11 items-center text-[15px] font-bold text-teal no-underline transition-colors hover:text-teal-dark md:flex"
+        >
+          Instagram'da tümünü görün →
+        </a>
+      </div>
+      <div
+        role="region"
+        aria-label="Son işlerimiz"
+        tabindex="0"
+        class="no-scrollbar -mr-[var(--gutter)] flex snap-x snap-mandatory gap-3.5 overflow-x-auto pr-[var(--gutter)] md:mr-0 md:grid md:snap-none md:grid-cols-3 md:gap-6 md:overflow-visible md:pr-0"
+      >
+        {
+          recentWorks.map((work) => (
+            <figure class="group m-0 flex w-60 shrink-0 snap-start flex-col gap-3 md:w-auto md:gap-4">
+              <Picture
+                src={work.image}
+                alt={work.alt}
+                widths={[240, 480, 560]}
+                sizes="(min-width: 768px) 360px, 240px"
+                formats={['avif', 'webp']}
+                class="aspect-[4/5] w-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
+                pictureAttributes={{ class: 'block overflow-hidden rounded-[14px] md:rounded-2xl' }}
+              />
+              <figcaption class="flex flex-col gap-0.5 md:gap-1">
+                <strong class="text-[15px] font-bold md:text-[17px]">{work.title}</strong>
+                <span class="text-[13px] text-muted md:text-sm">{work.caption}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      <a
+        href={site.instagram}
+        target="_blank"
+        rel="noopener"
+        class="flex min-h-11 items-center self-start text-sm font-bold text-teal no-underline transition-colors hover:text-teal-dark md:hidden"
+      >
+        Instagram'da tümünü görün →
+      </a>
+    </div>
+  </section>
+
+  <!-- 05 — Fiyat al + İletişim -->
+  <div class="wrap flex flex-col gap-12 pt-16 pb-14 md:flex-row md:flex-wrap md:py-28">
+    <section id="fiyat" class="flex min-w-0 flex-col gap-5 md:flex-[1.1_1_460px] md:gap-6">
+      <SectionLabel number="05" label="Fiyat Al" />
+      <h2 class="m-0 text-[30px] leading-[1.12] font-extrabold tracking-[-0.03em] md:text-[clamp(30px,3vw,40px)]">
+        Net fiyatı bir mesajla öğrenin
+      </h2>
+      <p class="m-0 max-w-[480px] text-[15px] leading-[1.6] text-muted md:text-[17px] md:leading-[1.65]">
+        Fiyat, halının türüne ve ölçüsüne göre değişir. Ürünü seçin, WhatsApp'tan hemen iletelim.
+      </p>
+      <ul class="m-0 flex list-none flex-col border-t border-line p-0">
+        {
+          priceItems.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener"
+                class="group flex min-h-[60px] items-center justify-between border-b border-line text-ink no-underline"
+              >
+                <span class="text-base font-semibold transition-colors duration-150 group-hover:text-teal md:text-[17px]">{item.label}</span>
+                <span class="text-sm font-bold text-teal transition-[color,transform] duration-150 group-hover:translate-x-1 group-hover:text-teal-dark md:text-[15px]">Fiyat sor →</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section
+      id="iletisim"
+      aria-labelledby="iletisim-baslik"
+      class="dark-zone flex min-w-0 flex-col gap-[22px] rounded-[20px] bg-ink px-6 py-8 text-white md:flex-[1_1_400px] md:gap-7 md:rounded-3xl md:px-10 md:py-11"
+    >
+      <h2 id="iletisim-baslik" class="m-0 text-xs font-bold tracking-[0.12em] text-on-dark-muted uppercase md:text-[13px]">
+        İletişim
+      </h2>
+      <div class="flex flex-col gap-1 md:gap-1.5">
+        <span class="text-[13px] text-on-dark-muted md:text-sm">Telefon</span>
+        <a href={phoneHref} class="text-[28px] font-extrabold tracking-[-0.03em] text-white no-underline transition-colors hover:text-sun md:text-[34px]">
+          {site.phoneDisplay}
+        </a>
+      </div>
+      <dl class="m-0 grid grid-cols-2 gap-x-[18px] gap-y-[18px] border-t border-dark-line pt-5 md:gap-6 md:pt-6">
+        <div class="flex flex-col gap-1 md:gap-1.5">
+          <dt class="text-[13px] text-on-dark-muted md:text-sm">Adres</dt>
+          <!-- TODO: açık adres / Google Haritalar konumu işletmeden alınacak -->
+          <dd class="m-0 text-sm font-semibold md:text-base">{site.address}</dd>
+        </div>
+        <div class="flex flex-col gap-1 md:gap-1.5">
+          <dt class="text-[13px] text-on-dark-muted md:text-sm">Hizmet bölgesi</dt>
+          <dd class="m-0 text-sm font-semibold md:text-base">{site.serviceArea}</dd>
+        </div>
+        <div class="col-span-2 flex flex-col gap-1 md:col-span-1 md:gap-1.5">
+          <dt class="text-[13px] text-on-dark-muted md:text-sm">Instagram</dt>
+          <dd class="m-0 text-sm font-semibold md:text-base">
+            <a href={site.instagram} target="_blank" rel="noopener" class="text-white transition-colors hover:text-sun">{site.instagramHandle}</a>
+          </dd>
+        </div>
+        <div class="hidden flex-col gap-1.5 md:flex">
+          <dt class="text-sm text-on-dark-muted">Randevu</dt>
+          <dd class="m-0 text-base font-semibold">Telefon ve WhatsApp</dd>
+        </div>
+        <div class="col-span-2 flex flex-col gap-1 md:gap-1.5">
+          <dt class="text-[13px] text-on-dark-muted md:text-sm">Çalışma saatleri</dt>
+          <!-- TODO: çalışma saatleri işletmeden alınacak -->
+          <dd class="m-0 text-sm font-semibold md:text-base">{site.openingHours ?? '[Çalışma saatleri]'}</dd>
+        </div>
+      </dl>
+      <Button href={waLink(waMessages.general)} variant="whatsapp" icon="whatsapp" class="mt-auto w-full">
+        WhatsApp'tan Randevu Al
+      </Button>
+    </section>
+  </div>
+</BaseLayout>

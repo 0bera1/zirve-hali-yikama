@@ -1,0 +1,131 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import Button from '../../components/Button.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import FaqList from '../../components/FaqList.astro';
+import { phoneHref, site } from '../../data/site';
+import { carpetSteps, carpetTypes } from '../../data/content';
+import { haliFaqs } from '../../data/faqs';
+import { waLink, waMessages } from '../../lib/whatsapp';
+import aracHalilar from '../../assets/arac-halilar.jpg';
+
+const title = 'Tire Halı Yıkama — Fabrikada Yıkama, Paketli Teslim | Zirve';
+const description =
+  "Tire'de halı yıkama: makine, yün, shaggy halı, kilim ve yolluk. Kapınızdan alır, fabrikada yıkar, kurutur ve paketleyip teslim ederiz.";
+
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Halı yıkama',
+  name: 'Halı Yıkama',
+  description,
+  provider: { '@type': 'DryCleaningOrLaundry', name: site.name, telephone: site.phoneE164 },
+  areaServed: site.city,
+};
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: haliFaqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={[serviceLd, faqLd]}>
+  <SiteHeader slot="header" current="/hizmetler/hali-yikama/">
+    <div class="wrap flex flex-wrap items-center gap-x-14 gap-y-9 pt-12 pb-[72px]">
+      <div class="flex min-w-0 flex-[1_1_420px] flex-col gap-5">
+        <nav aria-label="Konum" class="text-sm text-on-dark-muted">
+          <ol class="m-0 flex list-none flex-wrap gap-x-2 p-0">
+            <li><a href="/" class="text-on-dark underline transition-colors hover:text-white">Ana sayfa</a> <span aria-hidden="true">/</span></li>
+            <li><a href="/hizmetler/" class="text-on-dark underline transition-colors hover:text-white">Hizmetler</a> <span aria-hidden="true">/</span></li>
+            <li><span aria-current="page">Halı Yıkama</span></li>
+          </ol>
+        </nav>
+        <h1 class="m-0 text-[clamp(40px,6vw,68px)] leading-none font-extrabold tracking-[-0.03em]">Halı Yıkama</h1>
+        <p class="m-0 max-w-[520px] text-lg leading-[1.6] text-on-dark">
+          Halılarınızı kapınızdan alıyor, fabrikamızda türüne uygun yöntemle yıkıyor, kurutup paketleyerek geri
+          getiriyoruz.
+        </p>
+        <div class="mt-1 flex flex-wrap gap-3">
+          <Button href={phoneHref} variant="yellow" size="md">Hemen Ara</Button>
+          <Button href={waLink(waMessages.carpetAppointment)} variant="ghost-light" size="md">
+            WhatsApp'tan Randevu
+          </Button>
+        </div>
+      </div>
+      <Picture
+        src={aracHalilar}
+        alt="Servis aracında paketlenmiş, teslime hazır halılar"
+        widths={[380, 760, 1000]}
+        sizes="(min-width: 1024px) 560px, 100vw"
+        formats={['avif', 'webp']}
+        loading="eager"
+        class="aspect-[4/3] w-full rounded-[18px] object-cover"
+        pictureAttributes={{ class: 'block min-w-0 flex-[1_1_380px]' }}
+      />
+    </div>
+  </SiteHeader>
+
+  <section class="wrap flex flex-col gap-8 pt-[88px]">
+    <h2 class="h-block m-0">Hangi halıları yıkıyoruz?</h2>
+    <ul class="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-3 p-0">
+      {
+        carpetTypes.map((type) => (
+          <li class="flex flex-col gap-1.5 rounded-[14px] border border-line p-5 transition-colors duration-150 hover:border-teal">
+            <strong class="text-base font-bold">{type.title}</strong>
+            <span class="text-sm text-muted">{type.text}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="wrap flex flex-col gap-9 pt-[88px]">
+    <h2 class="h-block m-0">Halınız bizde nasıl yıkanır?</h2>
+    <ol class="m-0 grid list-none grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-7 p-0">
+      {
+        carpetSteps.map((step, i) => (
+          <li
+            class:list={[
+              'flex flex-col gap-2 border-t-2 pt-5',
+              i === 0 ? 'border-teal' : 'border-line-strong',
+            ]}
+          >
+            <span class="text-sm font-extrabold text-teal">{String(i + 1).padStart(2, '0')}</span>
+            <strong class="text-lg font-bold">{step.title}</strong>
+            <span class="text-[15px] leading-[1.55] text-muted">{step.text}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="wrap pt-[88px]">
+    <div class="flex flex-wrap items-center gap-x-14 gap-y-7 rounded-3xl bg-sand p-[clamp(28px,5vw,56px)]">
+      <div class="flex min-w-0 flex-[1_1_380px] flex-col gap-3.5">
+        <h2 class="m-0 text-[clamp(26px,3vw,36px)] leading-[1.12] font-extrabold tracking-[-0.03em]">
+          Fiyat nasıl belirlenir?
+        </h2>
+        <p class="m-0 text-base leading-[1.65] text-muted">
+          Halı yıkama metrekare üzerinden fiyatlandırılır. Halının türü (makine, yün, shaggy) ve kirlilik durumu
+          fiyatı etkiler. Halınızın ölçüsünü yazın, net fiyatı hemen iletelim.
+        </p>
+      </div>
+      <Button href={waLink(waMessages.carpetSize)} variant="whatsapp" icon="whatsapp">
+        Ölçüyü gönder, fiyat al
+      </Button>
+    </div>
+  </section>
+
+  <section class="mx-auto flex max-w-[calc(820px+2*var(--gutter))] flex-col gap-6 px-[var(--gutter)] py-[88px]">
+    <h2 class="h-block m-0">Sık sorulan sorular</h2>
+    <FaqList items={haliFaqs} />
+  </section>
+
+  <CtaBand title="Halılarınızı yarın kapınızdan alalım mı?" />
+</BaseLayout>

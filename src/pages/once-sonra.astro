@@ -1,0 +1,100 @@
+---
+import { Picture } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import BeforeAfterPair from '../components/BeforeAfterPair.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { gallery, galleryFilters } from '../data/gallery';
+import { site } from '../data/site';
+---
+
+<BaseLayout
+  title="Önce & Sonra — Gerçek İşlerimiz | Zirve Halı Yıkama Tire"
+  description="Tire'deki evlerde yaptığımız koltuk, sandalye ve halı yıkama işlerinden gerçek önce ve sonra fotoğrafları."
+>
+  <SiteHeader
+    slot="header"
+    current="/once-sonra/"
+    crumbs={[{ label: 'Ana sayfa', href: '/' }, { label: 'Önce & Sonra' }]}
+    title="Önce & Sonra"
+    description="Tire'deki evlerde yaptığımız işlerden gerçek fotoğraflar."
+  />
+
+  <section class="wrap flex flex-col gap-8 pt-12 pb-[88px]">
+    <!-- JS yoksa filtre gizli kalır, tüm öğeler görünür -->
+    <div
+      role="group"
+      aria-label="Kategori filtresi"
+      data-filters
+      class="no-scrollbar hidden gap-2 overflow-x-auto js:flex"
+    >
+      {
+        galleryFilters.map((filter, i) => (
+          <button
+            type="button"
+            data-filter={filter.value}
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            class="min-h-11 shrink-0 cursor-pointer rounded-full border border-line-strong bg-white px-5 text-[15px] font-bold text-ink transition-colors duration-150 hover:border-ink aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-white"
+          >
+            {filter.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(min(320px,100%),1fr))] gap-x-6 gap-y-7" data-gallery>
+      {
+        gallery.map((item) => (
+          <figure data-cat={item.category} class="group m-0 flex flex-col gap-3.5">
+            {item.pair ? (
+              <BeforeAfterPair pair={item.pair} ratio="wide" class="rounded-2xl" />
+            ) : (
+              item.image && (
+                <Picture
+                  src={item.image}
+                  alt={item.alt ?? ''}
+                  widths={[360, 560, 760]}
+                  sizes="(min-width: 1024px) 384px, (min-width: 768px) 50vw, 100vw"
+                  formats={['avif', 'webp']}
+                  class="aspect-[4/3] w-full object-cover transition-transform duration-200 group-hover:scale-[1.03]"
+                  pictureAttributes={{ class: 'block overflow-hidden rounded-2xl' }}
+                />
+              )
+            )}
+            <figcaption class="flex items-baseline justify-between gap-3">
+              <strong class="text-base font-bold">{item.title}</strong>
+              <span class="text-sm text-muted">{item.caption}</span>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <a
+      href={site.instagram}
+      target="_blank"
+      rel="noopener"
+      class="flex min-h-11 items-center self-start text-[15px] font-bold text-teal no-underline transition-colors hover:text-teal-dark"
+    >
+      Daha fazlası Instagram'da · {site.instagramHandle} →
+    </a>
+  </section>
+
+  <CtaBand title="Sıradaki önce/sonra fotoğrafı sizin olsun." />
+</BaseLayout>
+
+<script>
+  const group = document.querySelector<HTMLElement>('[data-filters]');
+  const items = document.querySelectorAll<HTMLElement>('[data-gallery] [data-cat]');
+
+  group?.addEventListener('click', (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
+    if (!button) return;
+    const value = button.dataset.filter;
+
+    group.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+    items.forEach((item) => {
+      item.hidden = value !== 'all' && item.dataset.cat !== value;
+    });
+  });
+</script>
