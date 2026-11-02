@@ -1,0 +1,20 @@
+# derleme çıktısı
+dist/
+.astro/
+
+# bağımlılıklar
+node_modules/
+
+# loglar
+npm-debug.log*
+
+# ortam
+.env
+.env.*
+!.env.example
+
+# tasarım paketi (repoya girmez)
+zirve-tasarim-paketi/
+_tasarim/
+
+.DS_Store
