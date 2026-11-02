@@ -41,3 +41,13 @@ export const carpetSteps = [
   { title: 'Kurutma', text: 'Halı nemsiz ve kokusuz hale gelene kadar kurutulur.' },
   { title: 'Paketli teslim', text: 'Paketlenip evinize geri getirilir.' },
 ];
+
+export const mobileNav = [
+  { href: '/', label: 'Ana Sayfa' },
+  { href: '/hizmetler/', label: 'Hizmetler' },
+  { href: '/hizmetler/hali-yikama/', label: 'Halı Yıkama' },
+  { href: '/once-sonra/', label: 'Önce / Sonra' },
+  { href: '/#surec', label: 'Süreç' },
+  { href: '/#fiyat', label: 'Fiyat Al' },
+  { href: '/#iletisim', label: 'İletişim' },
+];

@@ -1,0 +1,163 @@
+---
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+import { phoneHref, site } from '../data/site';
+import { mobileNav } from '../data/content';
+import { waLink, waMessages } from '../lib/whatsapp';
+
+interface Props {
+  /** Aktif sayfanın yolu (örn. /hizmetler/) */
+  current?: string;
+}
+
+const { current } = Astro.props;
+---
+
+<button
+  type="button"
+  data-menu-toggle
+  aria-expanded="false"
+  aria-controls="mobile-menu"
+  aria-label="Menüyü aç"
+  class="group relative z-[60] flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-white/55 text-white transition-colors duration-150 hover:border-white hover:bg-white/10 md:hidden"
+>
+  <span aria-hidden="true" class="relative block h-3.5 w-5">
+    <span
+      class="absolute top-0 left-0 block h-0.5 w-5 rounded-full bg-current transition-transform duration-300 group-aria-expanded:translate-y-1.5 group-aria-expanded:rotate-45"
+    ></span>
+    <span
+      class="absolute top-1.5 left-0 block h-0.5 w-5 rounded-full bg-current transition-[opacity,transform] duration-200 group-aria-expanded:scale-x-0 group-aria-expanded:opacity-0"
+    ></span>
+    <span
+      class="absolute top-3 left-0 block h-0.5 w-5 rounded-full bg-current transition-transform duration-300 group-aria-expanded:-translate-y-1.5 group-aria-expanded:-rotate-45"
+    ></span>
+  </span>
+</button>
+
+<div
+  id="mobile-menu"
+  data-menu-panel
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menü"
+  class="menu-panel fixed inset-0 z-[55] overflow-y-auto bg-ink text-white md:hidden"
+>
+  <div class="wrap flex h-[76px] items-center">
+    <Logo href="/" size="sm" />
+  </div>
+  <div class="wrap flex min-h-[calc(100%-76px)] flex-col gap-8 pt-2 pb-8">
+    <nav aria-label="Mobil menü">
+      <ul class="m-0 flex list-none flex-col border-t border-dark-line p-0">
+        {
+          mobileNav.map((link, i) => (
+            <li class="menu-item border-b border-dark-line" style={`--i:${i}`}>
+              <a
+                href={link.href}
+                aria-current={link.href === current ? 'page' : undefined}
+                class="flex min-h-14 items-center justify-between py-3 text-[26px] font-extrabold tracking-[-0.03em] text-white no-underline transition-colors duration-150 hover:text-sun aria-[current=page]:text-sun"
+              >
+                {link.label}
+                <span aria-hidden="true" class="text-xl font-semibold text-on-dark-muted">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <div class="menu-item mt-auto flex flex-col gap-2.5" style={`--i:${mobileNav.length}`}>
+      <Button href={phoneHref} variant="yellow" icon="phone" class="w-full">
+        Hemen Ara · {site.phoneDisplay}
+      </Button>
+      <Button href={waLink(waMessages.general)} variant="ghost-light" icon="whatsapp" class="w-full">
+        WhatsApp'tan Yazın
+      </Button>
+      <p class="m-0 mt-2 text-center text-[13px] text-on-dark-muted">{site.address}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .menu-panel {
+    visibility: hidden;
+    clip-path: circle(0px at calc(100% - var(--gutter) - 22px) 38px);
+    transition:
+      clip-path 0.4s cubic-bezier(0.7, 0, 0.3, 1),
+      visibility 0s 0.4s;
+  }
+  .menu-panel[data-open] {
+    visibility: visible;
+    clip-path: circle(150vmax at calc(100% - var(--gutter) - 22px) 38px);
+    transition:
+      clip-path 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+      visibility 0s;
+  }
+  .menu-item {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+  .menu-panel[data-open] .menu-item {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.4s ease calc(var(--i) * 50ms + 150ms),
+      transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) calc(var(--i) * 50ms + 150ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .menu-panel,
+    .menu-panel[data-open],
+    .menu-item,
+    .menu-panel[data-open] .menu-item {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-menu-panel]');
+
+  if (toggle && panel) {
+    const focusables = () =>
+      [toggle, ...panel.querySelectorAll<HTMLElement>('a[href], button')].filter((el) => el.offsetParent !== null || el === toggle);
+
+    const setOpen = (open: boolean, restoreFocus = true) => {
+      panel.toggleAttribute('data-open', open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Menüyü kapat' : 'Menüyü aç');
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) panel.querySelector<HTMLElement>('nav a')?.focus({ preventScroll: true });
+      else if (restoreFocus) toggle.focus();
+    };
+
+    toggle.addEventListener('click', () => setOpen(!panel.hasAttribute('data-open')));
+    panel.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false, false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (!panel.hasAttribute('data-open')) return;
+      if (event.key === 'Escape') {
+        setOpen(false);
+      } else if (event.key === 'Tab') {
+        const items = focusables();
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // Masaüstü genişliğine geçilirse menüyü kapat
+    window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => {
+      if (e.matches) setOpen(false, false);
+    });
+  }
+</script>

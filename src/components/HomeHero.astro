@@ -3,6 +3,7 @@ import { Picture } from 'astro:assets';
 import Logo from './Logo.astro';
 import Icon from './Icon.astro';
 import Button from './Button.astro';
+import MobileMenu from './MobileMenu.astro';
 import { phoneHref, site } from '../data/site';
 import { heroServicesWide, heroStrip, homeNav } from '../data/content';
 import { waLink, waMessages } from '../lib/whatsapp';
@@ -41,14 +42,17 @@ import heroImage from '../assets/hero-hali.jpg';
       <nav aria-label="Ana menü" class="hidden flex-wrap gap-x-9 gap-y-1 text-[15px] font-semibold md:flex">
         {homeNav.map((link) => <a href={link.href} class="py-2.5 text-on-dark-soft no-underline transition-colors duration-150 hover:text-sun">{link.label}</a>)}
       </nav>
-      <a
-        href={phoneHref}
-        class="flex h-11 items-center gap-2 rounded-full border border-white/55 px-4 text-sm font-bold text-white no-underline transition-colors duration-150 hover:border-white hover:bg-white/10 md:h-[46px] md:px-5 md:text-[15px]"
-      >
-        <Icon name="phone" />
-        <span class="md:hidden">Ara</span>
-        <span class="hidden md:inline">{site.phoneDisplay}</span>
-      </a>
+      <div class="flex items-center gap-2">
+        <a
+          href={phoneHref}
+          class="flex h-11 items-center gap-2 rounded-full border border-white/55 px-4 text-sm font-bold text-white no-underline transition-colors duration-150 hover:border-white hover:bg-white/10 md:h-[46px] md:px-5 md:text-[15px]"
+        >
+          <Icon name="phone" />
+          <span class="md:hidden">Ara</span>
+          <span class="hidden md:inline">{site.phoneDisplay}</span>
+        </a>
+        <MobileMenu current="/" />
+      </div>
     </div>
   </header>
 
