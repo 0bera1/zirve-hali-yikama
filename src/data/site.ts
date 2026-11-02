@@ -12,6 +12,7 @@ export const site = {
   region: 'İzmir',
   country: 'TR',
   serviceArea: 'Tire ve çevresi',
+  designer: { name: 'Bera', url: 'https://beraekimci.com.tr' },
   // TODO: çalışma saatleri işletmeden alınacak
   openingHours: null as string | null,
   // TODO: kampanyanın güncel olup olmadığı işletmeden teyit edilecek
