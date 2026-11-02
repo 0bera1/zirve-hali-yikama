@@ -1,0 +1,143 @@
+@import 'tailwindcss';
+
+/* Fontlar self-host: yalnızca kullanılan ağırlıklar */
+@import '@fontsource-variable/plus-jakarta-sans/wght.css';
+@import '@fontsource/russo-one/400.css';
+@import '@fontsource/kaushan-script/400.css';
+
+@custom-variant js (:where(.js) &);
+
+@theme {
+  --color-ink: #121417;
+  --color-paper: #ffffff;
+  --color-sand: #f6f5f1;
+  --color-line: #e7e5df;
+  --color-line-strong: #d6d3cb;
+  --color-muted: #5f636b;
+  --color-teal: #0f766e;
+  --color-teal-dark: #0b5d57;
+  --color-sun: #ffc93c;
+  --color-whatsapp: #128c4a;
+  /* Metin içeren WhatsApp butonları için AA kontrastı sağlayan koyu ton */
+  --color-whatsapp-strong: #0e7a40;
+  --color-on-dark: #c9ccd1;
+  --color-on-dark-muted: #a3a7ae;
+  --color-on-dark-soft: #e2e4e7;
+  --color-on-dark-faint: #8c9097;
+  --color-dark-line: #2c2f35;
+  --color-dark-line-soft: #26292e;
+
+  --font-sans: 'Plus Jakarta Sans Variable', system-ui, sans-serif;
+  --font-logo: 'Russo One', Impact, sans-serif;
+  --font-script: 'Kaushan Script', cursive;
+
+  --shadow-fab: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+
+:root {
+  --gutter: clamp(20px, 4vw, 32px);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background: var(--color-paper);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    overflow-x: hidden;
+  }
+
+  :where(a, button, summary):focus-visible {
+    outline: 2px solid var(--color-sun);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Açık zeminde sarı halka düşük kontrastlı olur */
+  :where(main a, main button, main summary):focus-visible {
+    outline-color: var(--color-teal);
+  }
+
+  /* Koyu veya teal zemindeki bölümlerde sarı halka */
+  .dark-zone :where(a, button, summary):focus-visible {
+    outline-color: var(--color-sun);
+  }
+
+  [id] {
+    scroll-margin-top: 16px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility wrap {
+  margin-inline: auto;
+  width: 100%;
+  max-width: calc(1200px + 2 * var(--gutter));
+  padding-inline: var(--gutter);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility h-hero {
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  font-size: 44px;
+  @media (min-width: 48rem) {
+    font-size: clamp(44px, 5.8vw, 82px);
+    line-height: 1;
+  }
+}
+
+@utility h-section {
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  font-size: 30px;
+  @media (min-width: 48rem) {
+    font-size: clamp(32px, 3.4vw, 46px);
+    line-height: 1.1;
+  }
+}
+
+@utility h-page {
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-size: clamp(40px, 6vw, 72px);
+}
+
+@utility h-block {
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-size: clamp(28px, 3vw, 40px);
+}
+
+@utility section-y {
+  padding-block: 64px 56px;
+  @media (min-width: 48rem) {
+    padding-block: 112px;
+  }
+}
