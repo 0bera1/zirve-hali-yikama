@@ -1,0 +1,90 @@
+---
+import '../styles/global.css';
+import WhatsAppFab from '../components/WhatsAppFab.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Sayfaya özgü ek JSON-LD nesneleri (Service, FAQPage…) */
+  jsonLd?: Record<string, unknown>[];
+  noindex?: boolean;
+}
+
+const { title, description, jsonLd = [], noindex = false } = Astro.props;
+
+const siteUrl = Astro.site ?? new URL('http://localhost:4321');
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = new URL('/og-image.jpg', siteUrl).href;
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'DryCleaningOrLaundry',
+  '@id': `${siteUrl.origin}/#business`,
+  name: site.name,
+  url: siteUrl.origin + '/',
+  image: ogImage,
+  telephone: site.phoneE164,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Merkez',
+    addressLocality: site.city,
+    addressRegion: site.region,
+    addressCountry: site.country,
+  },
+  areaServed: site.city,
+  sameAs: [site.instagram],
+  // TODO: çalışma saatleri alınınca site.openingHours doldurulacak (örn. "Mo-Sa 08:30-19:00")
+  ...(site.openingHours ? { openingHours: site.openingHours } : {}),
+};
+const graph = [localBusiness, ...jsonLd];
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#121417" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="tr_TR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    {graph.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
+  </head>
+  <body class="bg-paper text-ink antialiased">
+    <a
+      href="#icerik"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:rounded-lg focus:bg-sun focus:px-4 focus:py-2.5 focus:text-sm focus:font-bold focus:text-ink focus:no-underline"
+    >
+      İçeriğe geç
+    </a>
+    <slot name="header" />
+    <main id="icerik">
+      <slot />
+    </main>
+    <SiteFooter />
+    <WhatsAppFab />
+  </body>
+</html>

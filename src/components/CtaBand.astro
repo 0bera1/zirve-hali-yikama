@@ -1,0 +1,26 @@
+---
+import Button from './Button.astro';
+import { phoneHref } from '../data/site';
+import { waLink, waMessages } from '../lib/whatsapp';
+
+interface Props {
+  title: string;
+  waText?: string;
+}
+
+const { title, waText = waMessages.general } = Astro.props;
+---
+
+<section class="wrap pb-20">
+  <div
+    class="dark-zone flex flex-wrap items-center justify-between gap-6 rounded-3xl bg-teal p-[clamp(32px,5vw,56px)] text-white"
+  >
+    <h2 class="m-0 flex-[1_1_380px] text-[clamp(26px,3vw,36px)] leading-[1.15] font-extrabold tracking-[-0.03em]">
+      {title}
+    </h2>
+    <div class="flex flex-wrap gap-3">
+      <Button href={phoneHref} variant="yellow" size="md">Hemen Ara</Button>
+      <Button href={waLink(waText)} variant="ghost-light" size="md">WhatsApp'tan Yazın</Button>
+    </div>
+  </div>
+</section>

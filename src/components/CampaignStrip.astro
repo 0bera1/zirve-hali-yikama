@@ -1,0 +1,32 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../data/site';
+import { waLink, waMessages } from '../lib/whatsapp';
+
+const { campaign } = site;
+---
+
+{
+  campaign.active && (
+    <a
+      href={waLink(waMessages.campaign)}
+      target="_blank"
+      rel="noopener"
+      class="group block border-b border-line bg-sand text-ink no-underline transition-colors duration-150 hover:bg-[#efede6]"
+    >
+      <div class="wrap flex items-center gap-3.5 py-[18px] md:flex-wrap md:gap-x-5 md:gap-y-3">
+        <span class="shrink-0 rounded-md bg-sun px-2 py-[5px] text-[11px] font-extrabold tracking-[0.08em] md:px-2.5 md:text-xs">
+          KAMPANYA
+        </span>
+        <span class="flex-1 text-sm leading-[1.45] font-semibold md:flex-none md:text-[15px]">
+          <span class="md:hidden">{campaign.shortText}</span>
+          <span class="hidden md:inline">{campaign.text}</span>{' '}
+          <strong class="font-extrabold">{campaign.price}</strong>{' '}
+          <span class="text-muted line-through">{campaign.oldPrice}</span>
+        </span>
+        <span class="hidden text-[15px] font-bold text-teal transition-colors group-hover:text-teal-dark md:ml-auto md:inline">Kampanyadan yararlanın →</span>
+        <Icon name="chevron-right" class="text-teal transition-transform duration-150 group-hover:translate-x-1 md:hidden" />
+      </div>
+    </a>
+  )
+}

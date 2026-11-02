@@ -1,0 +1,42 @@
+---
+interface Props {
+  /** sm: üst bant, md: masaüstü hero, footer: alt bilgi */
+  size?: 'sm' | 'md' | 'footer';
+  /** light: koyu zeminde beyaz yazı, dark: açık zeminde ink yazı */
+  tone?: 'light' | 'dark';
+  href?: string;
+  class?: string;
+}
+
+const { size = 'sm', tone = 'light', href, class: className } = Astro.props;
+
+const sizes = {
+  sm: {
+    top: 'text-[28px] tracking-[2px]',
+    bottom: 'text-[8.5px] tracking-[0.4px] mt-[3px]',
+  },
+  md: {
+    top: 'text-[28px] tracking-[2px] md:text-[34px] md:tracking-[2.5px]',
+    bottom: 'text-[8.5px] tracking-[0.4px] mt-[3px] md:text-[10.5px] md:tracking-[0.5px] md:mt-1',
+  },
+  footer: {
+    top: 'text-[38px] tracking-[2.5px] md:text-[44px] md:tracking-[3px]',
+    bottom: 'text-[11.5px] tracking-[0.5px] mt-[5px] md:text-[13px] md:tracking-[0.6px] md:mt-1.5',
+  },
+}[size];
+
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'font-logo flex -skew-x-[8deg] flex-col items-center leading-none uppercase no-underline',
+    href && 'transition-opacity duration-150 hover:opacity-85',
+    tone === 'light' ? 'text-white' : 'text-ink',
+    className,
+  ]}
+>
+  <span class={sizes.top}>ZİRVE</span>
+  <span class={sizes.bottom}>HALI &amp; KOLTUK YIKAMA</span>
+</Tag>

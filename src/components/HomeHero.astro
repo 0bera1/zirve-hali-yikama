@@ -1,0 +1,90 @@
+---
+import { Picture } from 'astro:assets';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import { phoneHref, site } from '../data/site';
+import { heroServicesWide, heroStrip, homeNav } from '../data/content';
+import { waLink, waMessages } from '../lib/whatsapp';
+// TODO: hero görseli stok/AI kaynaklı; yayından önce lisansı doğrulanacak veya işletmenin kendi fotoğrafıyla değiştirilecek
+import heroImage from '../assets/hero-hali.jpg';
+---
+
+<section class="dark-zone relative flex min-h-svh flex-col overflow-hidden text-white md:min-h-[800px]">
+  <Picture
+    src={heroImage}
+    alt="Salonda halı yıkama"
+    widths={[480, 768, 1080, 1440, 1920, 2560]}
+    sizes="100vw"
+    formats={['avif', 'webp']}
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+    class="absolute inset-0 h-full w-full object-cover object-[28%_center] md:-scale-x-100 md:object-center"
+    pictureAttributes={{ class: 'contents' }}
+  />
+  <!-- mobil: düz katman + alttan yukarı gradyan -->
+  <div class="absolute inset-0 bg-[rgba(12,13,15,0.38)] md:bg-[rgba(12,13,15,0.42)]"></div>
+  <div
+    class="absolute inset-x-0 bottom-0 h-[66%] bg-gradient-to-t from-[rgba(12,13,15,0.94)] to-[rgba(12,13,15,0)] md:hidden"
+  >
+  </div>
+  <!-- masaüstü: soldan sağa gradyan -->
+  <div
+    class="absolute inset-0 hidden bg-[linear-gradient(to_right,rgba(12,13,15,0.9)_0%,rgba(12,13,15,0.55)_45%,rgba(12,13,15,0)_80%)] md:block"
+  >
+  </div>
+
+  <header class="relative md:border-b md:border-white/15">
+    <div class="wrap flex flex-wrap items-center justify-between gap-x-10 gap-y-4 py-4 md:py-5">
+      <Logo href="/" size="md" />
+      <nav aria-label="Ana menü" class="hidden flex-wrap gap-x-9 gap-y-1 text-[15px] font-semibold md:flex">
+        {homeNav.map((link) => <a href={link.href} class="py-2.5 text-on-dark-soft no-underline transition-colors duration-150 hover:text-sun">{link.label}</a>)}
+      </nav>
+      <a
+        href={phoneHref}
+        class="flex h-11 items-center gap-2 rounded-full border border-white/55 px-4 text-sm font-bold text-white no-underline transition-colors duration-150 hover:border-white hover:bg-white/10 md:h-[46px] md:px-5 md:text-[15px]"
+      >
+        <Icon name="phone" />
+        <span class="md:hidden">Ara</span>
+        <span class="hidden md:inline">{site.phoneDisplay}</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="wrap relative mt-auto flex flex-wrap items-end justify-between gap-10 pb-7 md:pb-[72px]">
+    <div class="flex w-full flex-col gap-[18px] md:max-w-[700px] md:flex-[1_1_560px] md:gap-[26px]">
+      <p class="m-0 flex items-center gap-2 text-[13px] font-semibold text-on-dark-soft md:gap-2.5 md:text-[15px]">
+        <span class="size-2 rounded-full bg-sun md:size-[9px]"></span>
+        Tire / İzmir · Kapıdan alım ve teslim
+      </p>
+      <h1 class="h-hero m-0">Halınız kapıdan alınır, tertemiz döner.</h1>
+      <p class="m-0 max-w-[540px] text-base leading-[1.55] text-on-dark-soft md:text-[19px] md:leading-[1.6]">
+        Fabrikamızda profesyonel makinelerle yıkıyor, paketleyip evinize getiriyoruz.
+      </p>
+      <div class="mt-1 flex flex-col gap-2.5 md:mt-0 md:flex-row md:flex-wrap md:gap-3">
+        <Button href={phoneHref} variant="yellow" icon="phone" class="w-full md:h-[58px] md:w-auto md:px-[30px]">
+          Hemen Ara<span class="md:hidden"> · {site.phoneDisplay}</span>
+        </Button>
+        <Button
+          href={waLink(waMessages.general)}
+          variant="ghost-light"
+          icon="whatsapp"
+          class="w-full border-white/40 bg-white/12 md:h-[58px] md:w-auto md:px-[30px]"
+        >
+          WhatsApp'tan Yazın
+        </Button>
+      </div>
+      <ul
+        class="m-0 mt-1.5 flex list-none justify-between border-t border-white/20 p-0 pt-4 text-[11.5px] font-bold tracking-[0.1em] text-[#d5d7db] md:hidden"
+      >
+        {heroStrip.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+    <ul
+      class="m-0 hidden list-none flex-col gap-3.5 border-l border-white/30 px-[26px] py-[22px] text-[13px] font-bold tracking-[0.1em] text-[#d5d7db] md:flex"
+    >
+      {heroServicesWide.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,14 @@
+---
+import Icon from './Icon.astro';
+import { waLink, waMessages } from '../lib/whatsapp';
+---
+
+<a
+  href={waLink(waMessages.fab)}
+  target="_blank"
+  rel="noopener"
+  aria-label="WhatsApp'tan yazın"
+  class="shadow-fab fixed right-5 bottom-[max(20px,env(safe-area-inset-bottom))] z-50 flex size-[60px] items-center justify-center rounded-full bg-whatsapp text-white no-underline transition-transform duration-200 hover:scale-105 hover:bg-whatsapp-strong"
+>
+  <Icon name="whatsapp" size={28} />
+</a>

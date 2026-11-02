@@ -1,0 +1,20 @@
+---
+interface Props {
+  number?: string;
+  label: string;
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { number, label, tone = 'light', class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    'text-xs font-bold uppercase tracking-[0.12em] md:text-[13px]',
+    tone === 'light' ? 'text-teal' : 'text-on-dark-muted',
+    className,
+  ]}
+>
+  {number ? `${number} — ${label}` : label}
+</span>

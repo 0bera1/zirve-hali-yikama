@@ -1,0 +1,41 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
+
+interface Props {
+  href: string;
+  variant?: 'yellow' | 'whatsapp' | 'ghost-light' | 'dark';
+  size?: 'md' | 'lg';
+  icon?: IconName;
+  class?: string;
+}
+
+const { href, variant = 'yellow', size = 'lg', icon, class: className } = Astro.props;
+
+const variants = {
+  yellow: 'bg-sun text-ink font-extrabold hover:bg-[#ffd75e]',
+  whatsapp: 'bg-whatsapp-strong text-white font-bold hover:bg-[#0b6a37]',
+  'ghost-light': 'border border-white/55 text-white font-bold hover:border-white hover:bg-white/20',
+  dark: 'bg-ink text-white font-bold hover:bg-dark-line',
+};
+const sizes = {
+  md: 'h-[54px] px-6 rounded-[14px]',
+  lg: 'h-14 px-7 rounded-[14px]',
+};
+const external = href.startsWith('http');
+---
+
+<a
+  href={href}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+  class:list={[
+    'inline-flex items-center justify-center gap-2.5 text-base no-underline transition-[background-color,border-color,transform] duration-150 active:translate-y-px',
+    variants[variant],
+    sizes[size],
+    className,
+  ]}
+>
+  {icon && <Icon name={icon} />}
+  <span><slot /></span>
+</a>

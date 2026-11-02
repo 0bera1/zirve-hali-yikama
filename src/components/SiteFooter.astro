@@ -1,0 +1,25 @@
+---
+import Logo from './Logo.astro';
+import { phoneHref, site } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-ink text-white">
+  <div class="wrap flex flex-wrap justify-between gap-7 pt-11 pb-7 md:pt-12">
+    <div class="flex flex-col gap-4">
+      <Logo size="footer" class="self-start" />
+      <span class="font-script text-lg text-on-dark-muted md:text-xl">{site.slogan}</span>
+    </div>
+    <div class="flex flex-col gap-2 text-[15px]">
+      <a href={phoneHref} class="inline-flex min-h-6 font-bold text-white no-underline transition-colors hover:text-sun">{site.phoneDisplay}</a>
+      <span class="text-on-dark">{site.address}</span>
+      <a href={site.instagram} target="_blank" rel="noopener" class="text-on-dark underline transition-colors hover:text-white">{site.instagramHandle}</a>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="border-t border-dark-line-soft pt-5 pb-7 text-[13px] text-on-dark-faint">
+      © {year} {site.name}
+    </div>
+  </div>
+</footer>

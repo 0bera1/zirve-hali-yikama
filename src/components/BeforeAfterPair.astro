@@ -1,0 +1,53 @@
+---
+import { Picture } from 'astro:assets';
+import type { Pair } from '../data/gallery';
+
+interface Props {
+  pair: Pair;
+  /** square: ana sayfa (1:1 görseller), wide: galeri (4:3 kutu) */
+  ratio?: 'square' | 'wide';
+  class?: string;
+}
+
+const { pair, ratio = 'square', class: className } = Astro.props;
+const wide = ratio === 'wide';
+
+const sizes = '(min-width: 768px) 260px, 45vw';
+const widths = [320, 480, 640];
+const tag =
+  'absolute bottom-2.5 rounded-md px-2 py-[5px] text-[10.5px] font-bold tracking-[0.1em] md:bottom-3.5 md:rounded-[7px] md:px-2.5 md:py-1.5 md:text-[11px]';
+const imgClass = wide ? 'h-full w-full object-cover' : 'aspect-square w-full object-cover';
+---
+
+<div
+  class:list={[
+    'grid grid-cols-2 gap-[3px] overflow-hidden rounded-2xl bg-ink md:rounded-[18px]',
+    wide && 'aspect-[4/3]',
+    className,
+  ]}
+>
+  <div class="relative min-h-0">
+    <Picture
+      src={pair.before}
+      alt={pair.beforeAlt}
+      widths={widths}
+      sizes={sizes}
+      formats={['avif', 'webp']}
+      class={imgClass}
+      pictureAttributes={{ class: 'block h-full' }}
+    />
+    <span class:list={[tag, 'left-2.5 bg-ink/85 text-white md:left-3.5']}>ÖNCE</span>
+  </div>
+  <div class="relative min-h-0">
+    <Picture
+      src={pair.after}
+      alt={pair.afterAlt}
+      widths={widths}
+      sizes={sizes}
+      formats={['avif', 'webp']}
+      class={imgClass}
+      pictureAttributes={{ class: 'block h-full' }}
+    />
+    <span class:list={[tag, 'right-2.5 bg-white text-ink md:right-3.5']}>SONRA</span>
+  </div>
+</div>
